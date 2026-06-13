@@ -51,7 +51,17 @@ async def get_job_status(job_id: str, db: Session = Depends(get_db)):
     job = db.query(Job).filter(Job.id == job_id).first()
     if not job:
         raise HTTPException(404, "Job not found")
-    return job
+    return JobStatusOut(
+        job_id=job.id,
+        filename=job.filename,
+        status=job.status,
+        row_count_raw=job.row_count_raw,
+        row_count_clean=job.row_count_clean,
+        error_message=job.error_message,
+        created_at=job.created_at,
+        completed_at=job.completed_at,
+        summary=JobSummaryOut.model_validate(job.summary) if job.summary else None,
+    )
 
 
 @router.get("/{job_id}/results", response_model=JobResultsOut)

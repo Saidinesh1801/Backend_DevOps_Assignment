@@ -45,9 +45,11 @@ class JobStatusOut(BaseModel):
     error_message: Optional[str] = None
     created_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
+    summary: Optional[JobSummaryOut] = None
 
     class Config:
         from_attributes = True
+        populate_by_name = True
 
 
 class JobResultsOut(BaseModel):
